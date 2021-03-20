@@ -148,6 +148,118 @@
     
     
     <article
+  id="blog-中国大学生在线某活动刷分漏洞分析及脚本实现"
+  class="article article-type-blog"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/2021/03/20/%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E5%9C%A8%E7%BA%BF%E6%9F%90%E6%B4%BB%E5%8A%A8%E5%88%B7%E5%88%86%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%8A%E8%84%9A%E6%9C%AC%E5%AE%9E%E7%8E%B0/"
+    >中国大学生在线某活动刷分漏洞分析及脚本实现</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/03/20/%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E5%9C%A8%E7%BA%BF%E6%9F%90%E6%B4%BB%E5%8A%A8%E5%88%B7%E5%88%86%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%8A%E8%84%9A%E6%9C%AC%E5%AE%9E%E7%8E%B0/" class="article-date">
+  <time datetime="2021-03-20T06:51:23.000Z" itemprop="datePublished">2021-03-20</time>
+</a>    
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>当初朋友学校要搞这活动，说排行榜上全是刷分大佬，让我来看看。我一听，啪的一下很快啊，第一时间拿到站分析了一下。（号已经没了）</p>
+<p>登录时抓取获取token包，此包可以进行重放(没修复)</p>
+<p><a target="_blank" rel="noopener" href="http://ssxx.univs.cn/clientLogin?redirect=/client/detail/5f71e934bcdbf3a8c3ba5061">http://ssxx.univs.cn/clientLogin?redirect=%2Fclient%2Fdetail%2F5f71e934bcdbf3a8c3ba5061</a></p>
+<p>一场答题的正常流程</p>
+<p><img src="/images/si_shi_shua_fen.png" alt="/images/si_shi_shua_fen.png"></p>
+<p>发送  开始答题 包  →返回底下测试时将要出现的题目ID和本次答题的答题ID</p>
+<p><img src="/images/si_shi_shua_fen/Untitled.png" alt="/images/si_shi_shua_fen/Untitled.png"></p>
+<p>然后前端继续从刚才返回的题目ID中逐一发送请求题目的（获取题目内容）包 返回当前题目的详细内容 通过GTE请求的方式传输  刚才返回的ID会被带上请求</p>
+<p><img src="/images/si_shi_shua_fen/Untitled%201.png" alt="/images/si_shi_shua_fen/Untitled%201.png"></p>
+<p>答题包</p>
+<p>POST请求  传入刚才的题目ID 和答案ID  若错误会返回正确的答案ID</p>
+<p>漏洞修复前 ：传入的题目ID不是之前开始答题返回包里的题目ID也是可以的</p>
+<p>修复后：会判断题目ID是否在开始答题返回的题目库中 不在则会被拒绝</p>
+<p><img src="/images/si_shi_shua_fen/Untitled%202.png" alt="/images/si_shi_shua_fen/Untitled%202.png"></p>
+<p>答题结束包</p>
+<p>将第一个包的RACE ID post出去 返回获得的积分</p>
+<p>漏洞修复后—-加入了时间检测</p>
+<p><img src="/images/si_shi_shua_fen/Untitled%203.png" alt="/images/si_shi_shua_fen/Untitled%203.png"></p>
+<p>几个参数</p>
+<ul>
+<li>t ——UNIX时间戳   （漏洞修补后开始答题和结束答题包发的太快会返回答题太快的包拒绝，联想到会不会服务器将服务器的时间戳和开始时的时间戳进行比较来判断答题时间的。试验后发现并不是。。好像没多大用）</li>
+<li>activity_id———可能是用户标识</li>
+<li>mode_id————选择的答题的类型（有几大答题板块）</li>
+<li>way———-暂时不知道</li>
+<li>question_id———-题目ID（题目ID和答案ID都是不变的）</li>
+<li>answer————-答案ID</li>
+</ul>
+<h2 id="漏洞修复前的自动化刷分方案"><a href="#漏洞修复前的自动化刷分方案" class="headerlink" title="漏洞修复前的自动化刷分方案"></a>漏洞修复前的自动化刷分方案</h2><p><img src="/images/si_shi_shua_fen/QQ20201122101700.png" alt="/images/si_shi_shua_fen/QQ20201122101700.png"></p>
+<p>可以先用开始答题的包（返回题目ID）配合答题的包（返回正确答案）</p>
+<p>自动化思路</p>
+<h3 id="在这之前"><a href="#在这之前" class="headerlink" title="在这之前"></a>在这之前</h3><p> 之前每次刷三四个小时 用户token会自动过期 这个网站的登录本质上是每次发包都带上Authorization头中的内容（一种用户凭证给服务器识别用户的）</p>
+<p><img src="/images/si_shi_shua_fen/Untitled%204.png" alt="/images/si_shi_shua_fen/Untitled%204.png"></p>
+<p> 可以是用一开始登录时用户的包发送可以继续自动登录永不掉线刷下去</p>
+<p>1</p>
+<p>发送开始答题包（将获取的RACE_id存入变量供结束包使用）</p>
+<p>获取题目包</p>
+<p>答题包</p>
+<p>结束包</p>
+<hr>
+<p>加一分要发四个四个包</p>
+<p>2</p>
+<p>建立一个题库字典</p>
+<p>让程序循环执行</p>
+<pre><code>发开始包（从中获取race_id存入变量）
+
+    （红色的字部分从题库反复遍历答完题库中所有题目）
+
+     获取题目包
+
+     答题包
+
+结束包（将开始的race_id放入包中发出）
+</code></pre>
+<hr>
+<p>相比1程序 每加一个积分都要要少发开始和结束race 的包</p>
+<p>3</p>
+<p>多线程 </p>
+<p>注意到不同的MODE_ID之间答题互不干扰，是相互独立存在的</p>
+<p>可以让程序同时答这几个大专题的题目</p>
+<p>建立五个线程</p>
+<p>每个线程类似于2中写的程序  只是modeID改变</p>
+<hr>
+<p>这个蛮快的</p>
+<hr>
+<p>脚本实现截图</p>
+<p><img src="/images/si_shi_shua_fen/20201121_212126.jpg" alt="/images/si_shi_shua_fen/20201121_212126.jpg"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+    </footer>
+  </div>
+
+    
+ 
+    
+</article>
+
+    
+    <article
   id="blog-蓝桥楼赛25期第三题WP"
   class="article article-type-blog"
   itemscope
