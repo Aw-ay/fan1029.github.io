@@ -146,20 +146,20 @@
 </ul>
 <p>方法：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/5ac4602b14c6">https://www.jianshu.com/p/5ac4602b14c6</a></p>
 <h1 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h1><p>通过上文给出的命令查找具有root权限的suid文件</p>
-<p><img src="/images/lanqiaowpUntitled%201.png" alt="/images/lanqiaowpUntitled%201.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%201.png" alt="/images/lanqiaowp/Untitled%201.png"></p>
 <p>不难发现 有个CP出来了</p>
 <p>CP 是复制文件用的  </p>
 <p>那CP提权的方法可以是复制一个提前构造好的passwd（添加了一个root权限的用户）文件来覆盖系统中原有的passwd文件 然后切换到刚才添加的用户就提权成功了</p>
 <p>而根据题目的要求  我们也可以直接用CP来吧/root/flag来复制到其他我们有权限访问的文件夹下</p>
 <p>那我们先直接CD到 suid配置错误的文件目录下</p>
-<p><img src="/images/lanqiaowpUntitled%202.png" alt="/images/lanqiaowpUntitled%202.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%202.png" alt="/images/lanqiaowp/Untitled%202.png"></p>
 <p>使用CP进行一次尝试</p>
-<p><img src="/images/lanqiaowpUntitled%203.png" alt="/images/lanqiaowpUntitled%203.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%203.png" alt="/images/lanqiaowp/Untitled%203.png"></p>
 <p>它会提示我们权限不够 这似乎与上文提到的suid提权原理背道而驰  </p>
 <p>但其实不是   </p>
 <p>其实这里不妨使用ls -l 看一下</p>
-<p><img src="/images/lanqiaowpUntitled%204.png" alt="/images/lanqiaowpUntitled%204.png"></p>
-<p><img src="/images/lanqiaowpUntitled%205.png" alt="/images/lanqiaowpUntitled%205.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%204.png" alt="/images/lanqiaowp/Untitled%204.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%205.png" alt="/images/lanqiaowp/Untitled%205.png"></p>
 <p>前面部分对照下上面提供的表   后面的root yann 分别是文件所属的用户 和文件所属组</p>
 <p>可以看到此文件的拥有者是root  所属组是yann （该组用户有执行权限）其他用户没有任何权限  也就是说我们当前用户alice 是没有办法执行这个文件的  </p>
 <p>那当前的思路可以是</p>
@@ -174,24 +174,24 @@
 <p>没办法。。。。。。</p>
 <p>这个时候就是扯的地方。。。。其实他初始化环境的时候还给系统WWW文件夹下加了个 discuz论坛的文件 </p>
 <p>这边 他其实把系统的账户密码存在了数据库里  数据库的账号密码可以去Discuz里的数据库配置文件里去拿</p>
-<p><img src="/images/lanqiaowpUntitled%206.png" alt="/images/lanqiaowpUntitled%206.png"></p>
-<p><img src="/images/lanqiaowpUntitled%207.png" alt="/images/lanqiaowpUntitled%207.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%206.png" alt="/images/lanqiaowp/Untitled%206.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%207.png" alt="/images/lanqiaowp/Untitled%207.png"></p>
 <p>这个时候直接去mysql里去拿</p>
-<p><img src="/images/lanqiaowpUntitled%208.png" alt="/images/lanqiaowpUntitled%208.png"></p>
-<p><img src="/images/lanqiaowpUntitled%209.png" alt="/images/lanqiaowpUntitled%209.png"></p>
-<p><img src="/images/lanqiaowpUntitled%2010.png" alt="/images/lanqiaowpUntitled%2010.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%208.png" alt="/images/lanqiaowp/Untitled%208.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%209.png" alt="/images/lanqiaowp/Untitled%209.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%2010.png" alt="/images/lanqiaowp/Untitled%2010.png"></p>
 <p>这个时候里面就有yann的密码。。。。。。。。。。。</p>
 <p>然后我们可以尝试切换到yann用户去执行只有yann组内成员才有执行权限的CP文件</p>
-<p><img src="/images/lanqiaowpUntitled%2011.png" alt="/images/lanqiaowpUntitled%2011.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%2011.png" alt="/images/lanqiaowp/Untitled%2011.png"></p>
 <p>这边就切过去了</p>
 <p>这会我们再去用CP试试</p>
-<p><img src="/images/lanqiaowpUntitled%2012.png" alt="/images/lanqiaowpUntitled%2012.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%2012.png" alt="/images/lanqiaowp/Untitled%2012.png"></p>
 <p>这个时候或许有人发现还是权限不够 </p>
 <p>其实这个时候要知道 LINUX里的默认CP命令是 /bin/ 底下的文件 可以类比windows的环境变量  而存在SUID配置错误的是 /var/local/backup/ 下的CP文件  </p>
 <p><strong>bin为binary的简写，主要放置系统的必备执行文件，例如 cat cp chmod df dmesg gzip ls kill mkdir su 等</strong></p>
-<p><img src="/images/lanqiaowpUntitled%2013.png" alt="/images/lanqiaowpUntitled%2013.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%2013.png" alt="/images/lanqiaowp/Untitled%2013.png"></p>
 <p>只要这样让他执行该目录下的cp 就可以复制成功了</p>
-<p><img src="/images/lanqiaowpUntitled%2014.png" alt="/images/lanqiaowpUntitled%2014.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%2014.png" alt="/images/lanqiaowp/Untitled%2014.png"></p>
 <h1 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h1><p>覆盖psswd文件提权为root</p>
 <p>复制一份passwd→添加新账户→覆盖原有passwd</p>
 <p>由于alice账户没有创建文件的权限 这边可以在桌面模式下新开一个终端 会回到shiyanlou账户</p>
@@ -205,10 +205,10 @@
 <ul>
 <li>用户主目录(home_directory)：该字段定义了个人用户的主目录，当用户登录后，他的Shell将把该目录作为用户的工作目录。 在Unix/Linux系统中，超级用户root的工作目录为/root；而其它个人用户在/home目录下均有自己独立的工作环境，系统在该目录下为每 个用户配置了自己的主目录。个人用户的文件都放置在各自的</li>
 </ul>
-<p><img src="/images/lanqiaowpUntitled%2015.png" alt="/images/lanqiaowpUntitled%2015.png"></p>
-<p><img src="/images/lanqiaowpUntitled%2016.png" alt="/images/lanqiaowpUntitled%2016.png"></p>
-<p><img src="/images/lanqiaowpUntitled%2017.png" alt="/images/lanqiaowpUntitled%2017.png"></p>
-<p><img src="/images/lanqiaowpUntitled%2018.png" alt="/images/lanqiaowpUntitled%2018.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%2015.png" alt="/images/lanqiaowp/Untitled%2015.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%2016.png" alt="/images/lanqiaowp/Untitled%2016.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%2017.png" alt="/images/lanqiaowp/Untitled%2017.png"></p>
+<p><img src="/images/lanqiaowp/Untitled%2018.png" alt="/images/lanqiaowp/Untitled%2018.png"></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本次主要还是针对suid的一次提权实操。难点在于发现当前使用的用户不在CP文件的所属组 故纵使suid配置错误 也是无法进行利用的 所以以后进行suid提权时还是有必要ls -l 列出文件的一些相关属性的查看的。</p>
  
       <!-- reward -->
