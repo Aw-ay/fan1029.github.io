@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-03-20T07:19:27.942Z</updated>
+  <updated>2021-03-20T07:28:05.959Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Apache Unomi远程代码执行漏洞（CVE-2020-13942）复现</title>
+    <link href="http://example.com/2021/03/20/Apache-Unomi%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2020-13942%EF%BC%89%E5%A4%8D%E7%8E%B0/"/>
+    <id>http://example.com/2021/03/20/Apache-Unomi%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2020-13942%EF%BC%89%E5%A4%8D%E7%8E%B0/</id>
+    <published>2021-03-20T07:25:37.000Z</published>
+    <updated>2021-03-20T07:28:05.959Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;环境搭建&quot;&gt;&lt;a href=&quot;#环境搭建&quot; class=&quot;headerlink&quot; title=&quot;环境搭建&quot;&gt;&lt;/a&gt;环境搭建&lt;/h2&gt;&lt;p&gt;vulhub+docker快速搭建&lt;/p&gt;
+&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>学习通越权上传+XSS组合拳</title>

