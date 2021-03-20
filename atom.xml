@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2021-03-20T08:47:08.600Z</updated>
+  <updated>2021-03-20T09:16:43.925Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从学校一卡通充值系统信息泄露到薅羊毛</title>
+    <link href="http://example.com/2021/03/20/%E4%B8%80%E5%8D%A1%E9%80%9A/"/>
+    <id>http://example.com/2021/03/20/%E4%B8%80%E5%8D%A1%E9%80%9A/</id>
+    <published>2021-03-20T09:14:17.000Z</published>
+    <updated>2021-03-20T09:16:43.925Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;学校一卡通充值系统的配套APP做工比较简陋，抓包观察一下发现报文全没有加密，所以没事准备挖挖来的。&lt;/p&gt;
+&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>记录某图书馆检索系统的两个洞</title>
