@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    中国大学生在线某活动刷分漏洞分析及脚本实现 |  Welcome.
+    学习通越权上传+XSS组合拳 |  Welcome.
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -52,7 +52,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="blog-中国大学生在线某活动刷分漏洞分析及脚本实现"
+  id="blog-学习通越权上传-XSS组合拳"
   class="article article-type-blog"
   itemscope
   itemprop="blogPost"
@@ -63,22 +63,22 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  中国大学生在线某活动刷分漏洞分析及脚本实现
+  学习通越权上传+XSS组合拳
 </h1>
  
 
     </header>
      
     <div class="article-meta">
-      <a href="/2021/03/20/%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E5%9C%A8%E7%BA%BF%E6%9F%90%E6%B4%BB%E5%8A%A8%E5%88%B7%E5%88%86%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%8A%E8%84%9A%E6%9C%AC%E5%AE%9E%E7%8E%B0/" class="article-date">
-  <time datetime="2021-03-20T06:51:23.000Z" itemprop="datePublished">2021-03-20</time>
+      <a href="/2021/03/20/%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%B6%8A%E6%9D%83%E4%B8%8A%E4%BC%A0-XSS%E7%BB%84%E5%90%88%E6%8B%B3/" class="article-date">
+  <time datetime="2021-03-20T07:06:48.000Z" itemprop="datePublished">2021-03-20</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">809</span>
+            <span class="post-count">1.1k</span>
         </span>
     </span>
 
@@ -87,7 +87,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">2 min</span>
+            <span class="post-count">4 min</span>
         </span>
     </span>
 </div>
@@ -102,72 +102,53 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>当初朋友学校要搞这活动，说排行榜上全是刷分大佬，让我来看看。我一听，啪的一下很快啊，第一时间拿到站分析了一下。（号已经没了）</p>
-<p>登录时抓取获取token包，此包可以进行重放(没修复)</p>
-<p><a target="_blank" rel="noopener" href="http://ssxx.univs.cn/clientLogin?redirect=/client/detail/5f71e934bcdbf3a8c3ba5061">http://ssxx.univs.cn/clientLogin?redirect=%2Fclient%2Fdetail%2F5f71e934bcdbf3a8c3ba5061</a></p>
-<p>一场答题的正常流程</p>
-<p><img src="/images/si_shi_shua_fen/si_shi_shua_fen.png" alt="/images/si_shi_shua_fen.png"></p>
-<p>发送  开始答题 包  →返回底下测试时将要出现的题目ID和本次答题的答题ID</p>
-<p><img src="/images/si_shi_shua_fen/Untitled.png" alt="/images/si_shi_shua_fen/Untitled.png"></p>
-<p>然后前端继续从刚才返回的题目ID中逐一发送请求题目的（获取题目内容）包 返回当前题目的详细内容 通过GTE请求的方式传输  刚才返回的ID会被带上请求</p>
-<p><img src="/images/si_shi_shua_fen/Untitled%201.png" alt="/images/si_shi_shua_fen/Untitled%201.png"></p>
-<p>答题包</p>
-<p>POST请求  传入刚才的题目ID 和答案ID  若错误会返回正确的答案ID</p>
-<p>漏洞修复前 ：传入的题目ID不是之前开始答题返回包里的题目ID也是可以的</p>
-<p>修复后：会判断题目ID是否在开始答题返回的题目库中 不在则会被拒绝</p>
-<p><img src="/images/si_shi_shua_fen/Untitled%202.png" alt="/images/si_shi_shua_fen/Untitled%202.png"></p>
-<p>答题结束包</p>
-<p>将第一个包的RACE ID post出去 返回获得的积分</p>
-<p>漏洞修复后—-加入了时间检测</p>
-<p><img src="/images/si_shi_shua_fen/Untitled%203.png" alt="/images/si_shi_shua_fen/Untitled%203.png"></p>
-<p>几个参数</p>
+  <p>这个主要是寒假回来要上网课无聊挖的</p>
+<h1 id="越权"><a href="#越权" class="headerlink" title="越权"></a>越权</h1><h2 id="1-课程系统资料处"><a href="#1-课程系统资料处" class="headerlink" title="1.课程系统资料处"></a>1.课程系统资料处</h2><p>首先在<strong>自己的账户</strong>创建一个课程 ，进入自己课程的资料上传界面，点击本地上传，如图2</p>
+<p><img src="/images/xue_xi_tong_1/Untitled.png" alt="/images/xue_xi_tong_1/Untitled.png"></p>
+<h2 id="2-选择一个资源文件夹，对文件夹进行重命名"><a href="#2-选择一个资源文件夹，对文件夹进行重命名" class="headerlink" title="2.选择一个资源文件夹，对文件夹进行重命名"></a>2.选择一个资源文件夹，对文件夹进行重命名</h2><p>使用burp对重命名操作进行抓包，发现是一个post型的操作，对其数据包参数进行分析可知</p>
 <ul>
-<li>t ——UNIX时间戳   （漏洞修补后开始答题和结束答题包发的太快会返回答题太快的包拒绝，联想到会不会服务器将服务器的时间戳和开始时的时间戳进行比较来判断答题时间的。试验后发现并不是。。好像没多大用）</li>
-<li>activity_id———可能是用户标识</li>
-<li>mode_id————选择的答题的类型（有几大答题板块）</li>
-<li>way———-暂时不知道</li>
-<li>question_id———-题目ID（题目ID和答案ID都是不变的）</li>
-<li>answer————-答案ID</li>
+<li>courseid为课程id  一个课程对应一个id（如重说《中国近代纲要》对应courseid=206203637）</li>
+<li>dataid 为课程中的资源id</li>
+<li>dataname 修改后的资源名  如下图</li>
 </ul>
-<h2 id="漏洞修复前的自动化刷分方案"><a href="#漏洞修复前的自动化刷分方案" class="headerlink" title="漏洞修复前的自动化刷分方案"></a>漏洞修复前的自动化刷分方案</h2><p><img src="/images/si_shi_shua_fen/QQ20201122101700.png" alt="/images/si_shi_shua_fen/QQ20201122101700.png"></p>
-<p>可以先用开始答题的包（返回题目ID）配合答题的包（返回正确答案）</p>
-<p>自动化思路</p>
-<h3 id="在这之前"><a href="#在这之前" class="headerlink" title="在这之前"></a>在这之前</h3><p> 之前每次刷三四个小时 用户token会自动过期 这个网站的登录本质上是每次发包都带上Authorization头中的内容（一种用户凭证给服务器识别用户的）</p>
-<p><img src="/images/si_shi_shua_fen/Untitled%204.png" alt="/images/si_shi_shua_fen/Untitled%204.png"></p>
-<p> 可以是用一开始登录时用户的包发送可以继续自动登录永不掉线刷下去</p>
-<p>1</p>
-<p>发送开始答题包（将获取的RACE_id存入变量供结束包使用）</p>
-<p>获取题目包</p>
-<p>答题包</p>
-<p>结束包</p>
+<p><img src="/images/xue_xi_tong_1/450OL6R88AAT(W)FQJ4J.png" alt="/images/xue_xi_tong_1/450OL6R88AAT(W)FQJ4J.png"></p>
+<p>看 POST参数  可知  courseid 为课程id  dataid 是要修改资源的id  dataname是要修改的名字</p>
+<h2 id="3-然后进入其他课程，获取其他课程id"><a href="#3-然后进入其他课程，获取其他课程id" class="headerlink" title="3.然后进入其他课程，获取其他课程id"></a>3.然后进入其他课程，获取其他课程id</h2><p>如图，这里我们选择进入学校网课期间的《中国近代史纲要》课程作为漏洞攻击案例</p>
+<p>点击要更改的文件抓包，在请求包中可以获得《中国近代史纲要》的courseid，dataid，dataname  等相关参数（后面我们需要用到）</p>
+<p><strong>下图2中可得《中国近代史纲要》courseid dataid</strong></p>
+<p><img src="/images/xue_xi_tong_1/_GNX" alt="/images/xue_xi_tong_1/_GNX)X)2LF2DEQ286.png">X)2LF2DEQ286.png)</p>
+<p><img src="/images/xue_xi_tong_1/Untitled%201.png" alt="/images/xue_xi_tong_1/Untitled%201.png"></p>
+<h2 id="4-修改重命名请求包参数"><a href="#4-修改重命名请求包参数" class="headerlink" title="4.修改重命名请求包参数"></a>4.修改重命名请求包参数</h2><p>将之前的重命名请求包中的courseid，dataid参数替换成《中国近代史纲要》的courseid，dataid，因为我们要修改《中国近代史纲要》中的资源内容，所以需要将原来数据包中的courseid，dataid参数修改《中国近代史纲要》的courseid，dataid参数</p>
+<p><strong>dataname</strong>  为重命名后的资源名，dataname改成什么，资源的名字就会被修改成什么</p>
+<p>这里我们将<strong>dataname=test，（dataname=欢迎加入滨江网安协会，这是一个越权漏洞）</strong>放行篡改后的数据包，结果如下图</p>
+<p><img src="/images/xue_xi_tong_1/QM" alt="/images/xue_xi_tong_1/QM)3G6A0VJPRDBWBK7.png">3G6A0VJPRDBWBK7.png)</p>
+<p>可见文件夹已经更名成功，《中国近代史纲要》课程下多出一个<strong>欢迎加入滨江网安协会，这是一个越权漏洞文件 和 test文件夹</strong></p>
+<h2 id="5-同理，抓取文件上传的请求包"><a href="#5-同理，抓取文件上传的请求包" class="headerlink" title="5.同理，抓取文件上传的请求包"></a>5.同理，抓取文件上传的请求包</h2><p>添加文件到资料包</p>
+<p>抓取想要上传的其他课程数据</p>
+<p>更改添加文件到资料包 中的数据 即可将任意文件上传到任意课程的文件夹中</p>
+<p><img src="/images/xue_xi_tong_1/Untitled%202.png" alt="/images/xue_xi_tong_1/Untitled%202.png"></p>
+<p><img src="/images/xue_xi_tong_1/Untitled%203.png" alt="/images/xue_xi_tong_1/Untitled%203.png"></p>
+<p>上传成功，结果如下图</p>
+<p><img src="/images/xue_xi_tong_1/Untitled%204.png" alt="/images/xue_xi_tong_1/Untitled%204.png"></p>
 <hr>
-<p>加一分要发四个四个包</p>
-<p>2</p>
-<p>建立一个题库字典</p>
-<p>让程序循环执行</p>
-<pre><code>发开始包（从中获取race_id存入变量）
+<p>当然这边除了重命名文件上传还有其他的越权点。</p>
+<h1 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h1><p>（学习通XSS好像还蛮多的）</p>
+<h2 id="1-抓取文件上传数据包"><a href="#1-抓取文件上传数据包" class="headerlink" title="1.抓取文件上传数据包"></a>1.抓取文件上传数据包</h2><p>进入文件上传处 抓取文件上传的包，上传文件的数据包如下图，上传文件为post型数据包，其中的jsondata为漏洞触发点，该段数据采用了URL编码加密。</p>
+<p><img src="/images/xue_xi_tong_1/Untitled%205.png" alt="/images/xue_xi_tong_1/Untitled%205.png"></p>
+<h2 id="2-jsondata数据解码"><a href="#2-jsondata数据解码" class="headerlink" title="2.jsondata数据解码"></a>2.jsondata数据解码</h2><p>将上图中jsondata加密数据解码后得到如下Json内容，</p>
+<p>漏洞位置 ：datasize处 （解码后数据）</p>
+<p>这边试过更改好多地方 发现其他地方改都被过滤掉了，后来发现文件大小那一栏没有怎么做过滤。果断一梭子。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[&#123;<span class="string">&quot;courseId&quot;</span>:<span class="string">&quot;216777036&quot;</span>,<span class="string">&quot;rootId&quot;</span>:<span class="string">&quot;0&quot;</span>,<span class="string">&quot;dataName&quot;</span>:<span class="string">&quot;123.png&quot;</span>,</span><br><span class="line"><span class="string">&quot;source&quot;</span>:<span class="string">&quot;1&quot;</span>,<span class="string">&quot;dataSize&quot;</span>:<span class="string">&quot;999PB&quot;</span>,<span class="string">&quot;dataType&quot;</span>:<span class="string">&quot;png&quot;</span>,<span class="string">&quot;objectId&quot;</span>:</span><br><span class="line"><span class="string">&quot;c11ba64e739aa87d231dbbccf9403de8&quot;</span>,<span class="string">&quot;courseName&quot;</span>:<span class="string">&quot;</span></span><br><span class="line"><span class="string">æ°æ®ç»æ&quot;</span>,<span class="string">&quot;isOpen&quot;</span>:<span class="string">&quot;0&quot;</span>,<span class="string">&quot;dataRealType&quot;</span>:<span class="string">&quot;ppt&quot;</span>&#125;]</span><br></pre></td></tr></table></figure>
 
-    （红色的字部分从题库反复遍历答完题库中所有题目）
+<h2 id="3-构造XSS攻击代码"><a href="#3-构造XSS攻击代码" class="headerlink" title="3.构造XSS攻击代码"></a>3.构造XSS攻击代码</h2><p>将datasize的内容替换为xss攻击语句（对比上下图可知999PB被替换成了&lt;input//onmouseover= &quot;window<a href="1">‘al’+’ert’</a>&quot;&gt;）</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[&#123;<span class="string">&quot;courseId&quot;</span>:<span class="string">&quot;216777036&quot;</span>,<span class="string">&quot;rootId&quot;</span>:<span class="string">&quot;0&quot;</span>,<span class="string">&quot;dataName&quot;</span>:<span class="string">&quot;123.png&quot;</span>,<span class="string">&quot;source&quot;</span>:<span class="string">&quot;1&quot;</span>,</span><br><span class="line"><span class="string">&quot;dataSize&quot;</span>:<span class="string">&quot;&lt;input//onmouseover= \&quot;window[&#x27;al&#x27;+&#x27;ert&#x27;](1)\&quot;&gt;&quot;</span>,<span class="string">&quot;dataType&quot;</span>:<span class="string">&quot;png&quot;</span>,</span><br><span class="line"><span class="string">&quot;objectId&quot;</span>:<span class="string">&quot;c11ba64e739aa87d231dbbccf9403de8&quot;</span>,<span class="string">&quot;courseName&quot;</span>:<span class="string">&quot;æ°æ®ç»æ&quot;</span>,<span class="string">&quot;isOpen&quot;</span>:<span class="string">&quot;0&quot;</span>,<span class="string">&quot;dataRealType&quot;</span>:<span class="string">&quot;ppt&quot;</span>&#125;]</span><br></pre></td></tr></table></figure>
 
-     获取题目包
-
-     答题包
-
-结束包（将开始的race_id放入包中发出）
-</code></pre>
-<hr>
-<p>相比1程序 每加一个积分都要要少发开始和结束race 的包</p>
-<p>3</p>
-<p>多线程 </p>
-<p>注意到不同的MODE_ID之间答题互不干扰，是相互独立存在的</p>
-<p>可以让程序同时答这几个大专题的题目</p>
-<p>建立五个线程</p>
-<p>每个线程类似于2中写的程序  只是modeID改变</p>
-<hr>
-<p>这个蛮快的</p>
-<hr>
-<p>脚本实现截图</p>
-<p><img src="/images/si_shi_shua_fen/20201121_212126.jpg" alt="/images/si_shi_shua_fen/20201121_212126.jpg"></p>
+<p>放行篡改后的数据包，发包上传文件，结果如下图</p>
+<p>发现文件大小处已经变成了输入框  鼠标移动时触发了弹窗事件，攻击成功！</p>
+<p><img src="/images/xue_xi_tong_1/Untitled%206.png" alt="/images/xue_xi_tong_1/Untitled%206.png"></p>
+<h2 id="4-XSS漏洞危害再度扩大"><a href="#4-XSS漏洞危害再度扩大" class="headerlink" title="4.XSS漏洞危害再度扩大"></a>4.XSS漏洞危害再度扩大</h2><p>此时插入xss攻击代码可以获取被害者的cookie 进行 密码钓鱼 木马钓鱼下载 页面劫持等</p>
+<p>获取到的cookie可以用来登录被害者的账号，如下图就属于攻击成功的案例，获取到了用户的cookie，后续，我们通过获取到的cookie凭证成功登录受害者的学习通账号</p>
+<p><img src="/images/xue_xi_tong_1/Untitled%207.png" alt="/images/xue_xi_tong_1/Untitled%207.png"></p>
  
       <!-- reward -->
       
@@ -220,7 +201,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/03/20/%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E5%9C%A8%E7%BA%BF%E6%9F%90%E6%B4%BB%E5%8A%A8%E5%88%B7%E5%88%86%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%8A%E8%84%9A%E6%9C%AC%E5%AE%9E%E7%8E%B0/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/03/20/%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%B6%8A%E6%9D%83%E4%B8%8A%E4%BC%A0-XSS%E7%BB%84%E5%90%88%E6%8B%B3/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -231,19 +212,10 @@
    
   <nav class="article-nav">
     
-      <a href="/2021/03/20/%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%B6%8A%E6%9D%83%E4%B8%8A%E4%BC%A0-XSS%E7%BB%84%E5%90%88%E6%8B%B3/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            学习通越权上传+XSS组合拳
-          
-        </div>
-      </a>
     
-    
-      <a href="/2021/03/20/%E8%93%9D%E6%A1%A5%E6%A5%BC%E8%B5%9B25%E6%9C%9F%E7%AC%AC%E4%B8%89%E9%A2%98WP/" class="article-nav-link">
+      <a href="/2021/03/20/%E4%B8%AD%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E5%9C%A8%E7%BA%BF%E6%9F%90%E6%B4%BB%E5%8A%A8%E5%88%B7%E5%88%86%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%8A%E8%84%9A%E6%9C%AC%E5%AE%9E%E7%8E%B0/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">蓝桥楼赛25期第三题WP</div>
+        <div class="article-nav-title">中国大学生在线某活动刷分漏洞分析及脚本实现</div>
       </a>
     
   </nav>
