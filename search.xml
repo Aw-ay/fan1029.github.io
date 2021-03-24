@@ -436,54 +436,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>从学校一卡通充值系统信息泄露到薅羊毛</title>
-    <url>/2021/03/20/%E4%B8%80%E5%8D%A1%E9%80%9A/</url>
-    <content><![CDATA[<p>学校一卡通充值系统的配套APP做工比较简陋，抓包观察一下发现报文全没有加密，所以没事准备挖挖来的。</p>
-<p><img src="/images/yikatong/11.jpg" alt="/images/yikatong/11.jpg"></p>
-<p>漏洞发生在充值电费的地方</p>
-<h2 id="1-电费充值处抓取请求包"><a href="#1-电费充值处抓取请求包" class="headerlink" title="1.电费充值处抓取请求包"></a>1.电费充值处抓取请求包</h2><p>在手机学付包APP抓取交电费页面的请求包</p>
-<p>并获取充值电费请求的网页</p>
-<p><img src="/images/yikatong/Screenshot_20210223-220039.jpg" alt="/images/yikatong/Screenshot_20210223-220039.jpg"></p>
-<h2 id="2-下图为成功从APP中抓取到的链接"><a href="#2-下图为成功从APP中抓取到的链接" class="headerlink" title="2.下图为成功从APP中抓取到的链接"></a>2.下图为成功从APP中抓取到的链接</h2><p>访问得到下图2的网页</p>
-<p><img src="/images/yikatong/Untitled.png" alt="/images/yikatong/Untitled.png"></p>
-<p><img src="/images/yikatong/Untitled%201.png" alt="/images/yikatong/Untitled%201.png"></p>
-<h2 id="3-刷新该页面，获取信息接口暴露"><a href="#3-刷新该页面，获取信息接口暴露" class="headerlink" title="3.刷新该页面，获取信息接口暴露"></a>3.刷新该页面，获取信息接口暴露</h2><p>分析抓取到的数据包可知，请求包中含有用户id，通过遍历用户id获取敏感信息</p>
-<p><img src="/images/yikatong/Untitled%202.png" alt="/images/yikatong/Untitled%202.png"></p>
-<h2 id="4-放行数据包"><a href="#4-放行数据包" class="headerlink" title="4.放行数据包"></a>4.放行数据包</h2><p>成功返回用户卡内余额 绑定银行卡卡号 身份证号码 等敏感信息 </p>
-<p><img src="/images/yikatong/Untitled%203.png" alt="/images/yikatong/Untitled%203.png"></p>
-<p><strong>此时尝试将卡号改为非账户本人信息，成功越权获取其他用户的敏感数据！</strong></p>
-<p><img src="/images/yikatong/Untitled%204.png" alt="/images/yikatong/Untitled%204.png"></p>
-<p>你以为到这边就结束了吗？</p>
-<p>由于这个软件做工比较垃圾 默认密码是身份证后六位而且想要改密码还没手机上改，所以几乎全校大部分人都是在用默认密码。</p>
-<p>所以只要写脚本就可以自动用别人的号给宿舍充电费  每人一角 换算过来也有八百多电费</p>
-<p>主要流程大概是</p>
-<p>1.登陆包—&gt;获取cookie,token等数据</p>
-<p>2.构造电费充值url 需要url中加上第一次登录给的token—&gt;返回一个session</p>
-<p>3.去往充值页面 代入刚才给的session 直接充钱 </p>
-<h2 id="利用脚本编写"><a href="#利用脚本编写" class="headerlink" title="利用脚本编写"></a>利用脚本编写</h2><p>由于之前漏洞已经获取了全校信息所以这次信息导入直接采用之前的社工库。</p>
-<p><img src="/images/yikatong/Untitled%205.png" alt="/images/yikatong/Untitled%205.png"></p>
-<p>filter里面写了正则匹配的函数用来匹配返回包里的内容</p>
-<p><img src="/images/yikatong/Untitled%206.png" alt="/images/yikatong/Untitled%206.png"></p>
-<p>set_goal包里用来设置充值对象</p>
-<p>get_building/floor/room 方法是之前抓取的获取宿舍信息的包</p>
-<p><img src="/images/yikatong/Untitled%207.png" alt="/images/yikatong/Untitled%207.png"></p>
-<p>创建一个类 带指登录的用户</p>
-<p>其中有登录 获取验证码 查询用户余额 充值等方法 </p>
-<p><img src="/images/yikatong/Untitled%208.png" alt="/images/yikatong/Untitled%208.png"></p>
-<h3 id="当然，登录验证码是个难题"><a href="#当然，登录验证码是个难题" class="headerlink" title="当然，登录验证码是个难题"></a>当然，登录验证码是个难题</h3><p>这个弄了我好几天 </p>
-<p>最终发现了一个python库叫 muggle-ocr</p>
-<p>里面自带几个训练好的验证码识别模型 一键无脑识别 很方便 </p>
-<p>就是装起来比较麻烦</p>
-<p>我当时使用python3.7+豆瓣的pip源才装起来的 其他源装好像会报错啥的反正比较麻烦</p>
-<p>识别率蛮高的能打到70% 偶尔抽风 后来发现这个软件验证码错5次会冻结你5分钟 这边直接计数验证码连续错误次数 达到四次sleep一分钟就行了。</p>
-<p>运行截图（没有打开充值模块）</p>
-<p><img src="/images/yikatong/Untitled%209.png" alt="/images/yikatong/Untitled%209.png"></p>
-<p>可以看到效率还是蛮可以的</p>
-<p><img src="/images/yikatong/Untitled%2010.png" alt="/images/yikatong/Untitled%2010.png"></p>
-<p><img src="/images/yikatong/111.gif" alt="/images/yikatong/111.gif"></p>
-]]></content>
-  </entry>
-  <entry>
     <title>如何优雅地破解龙猫校园</title>
     <url>/2021/03/24/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%9C%B0%E7%A0%B4%E8%A7%A3%E9%BE%99%E7%8C%AB%E6%A0%A1%E5%9B%AD/</url>
     <content><![CDATA[<h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>没错就是这个迫害广大学子的软件（手动滑稽）</p>
