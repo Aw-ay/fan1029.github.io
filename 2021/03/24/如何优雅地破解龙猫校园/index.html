@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    如何优雅地破解龙猫校园 |  Welcome.
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+  
+  
+
+  
+
+<link rel="alternate" href="/atom.xml" title="Welcome." type="application/atom+xml">
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    
+      <canvas class="fireworks"></canvas>
+      <style>
+        .fireworks {
+          position: fixed;
+          left: 0;
+          top: 0;
+          z-index: 99999;
+          pointer-events: none;
+        }
+      </style>
+      
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="blog-如何优雅地破解龙猫校园"
+  class="article article-type-blog"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  如何优雅地破解龙猫校园
+</h1>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2021/03/24/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%9C%B0%E7%A0%B4%E8%A7%A3%E9%BE%99%E7%8C%AB%E6%A0%A1%E5%9B%AD/" class="article-date">
+  <time datetime="2021-03-24T13:06:23.000Z" itemprop="datePublished">2021-03-24</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">2.3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">8 min</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>没错就是这个迫害广大学子的软件（手动滑稽）</p>
+<p><img src="longmaoxiaoyuan/Untitled.png" alt="longmaoxiaoyuan/Untitled.png"></p>
+<blockquote>
+<p>跑步是不可能的，这辈子都是不可能的。——鲁迅</p>
+</blockquote>
+<p><img src="longmaoxiaoyuan/2333.jpg" alt="longmaoxiaoyuan/2333.jpg"></p>
+<hr>
+<p>首先二话不说，肯定是抓个包哈。很快啊。</p>
+<p>不过运气不好</p>
+<p><img src="longmaoxiaoyuan/Untitled%201.png" alt="longmaoxiaoyuan/Untitled%201.png"></p>
+<p>请求包和返回包都被加密了。要想解密报文就必须逆向这个破软件</p>
+<p>虽然自己不会逆向，但想想自己以后的美好生活，便开始了一次负基础逆向实操</p>
+<h1 id="逆向"><a href="#逆向" class="headerlink" title="逆向"></a>逆向</h1><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>大致看了一下 软件用的腾讯御加固 </p>
+<p>反射大师一梭子直接脱壳</p>
+<p>脱出四个dex文件</p>
+<p><img src="longmaoxiaoyuan/Untitled%202.png" alt="longmaoxiaoyuan/Untitled%202.png"></p>
+<p>很快啊  放进JEB或者JADX 一看包名 代码 哦吼  他不讲武德  他还搞混淆 </p>
+<p><img src="longmaoxiaoyuan/Untitled%203.png" alt="longmaoxiaoyuan/Untitled%203.png"></p>
+<p>进MYApplication下看看应该是入口  直接反编译成java代码</p>
+<p>可见代码混淆的还是蛮严重的。。</p>
+<p>(不过第一眼就看到了扫脸的相关逻辑 蛮恶心的不是吗 滑稽.jpg)</p>
+<p><img src="longmaoxiaoyuan/Untitled%204.png" alt="longmaoxiaoyuan/Untitled%204.png"></p>
+<p>JEB2加载反混淆脚本（JADX下直接一键反混淆）虽然反混淆了但是部分关键方法类都还是杂乱的字符</p>
+<p>不过对比来说效果还是有的</p>
+<p><img src="longmaoxiaoyuan/Untitled%205.png" alt="longmaoxiaoyuan/Untitled%205.png"></p>
+<h2 id="寻找加密函数"><a href="#寻找加密函数" class="headerlink" title="寻找加密函数"></a>寻找加密函数</h2><p>这边由于没有逆向基础 花了好长时间。。。。回头来看看只要找对方法应该会蛮快的</p>
+<p>主要靠搜索定位大致代码区间 然后通过代码内容大致推测一些函数是用来干嘛的（毕竟被混淆了名字全变成了数字+字母）</p>
+<p>觉得有用的函数就直接调到函数调用的一些地方 还有函数声明的地方继续分析直到找到加密代码区</p>
+<hr>
+<p>这边开始搜索几个关键字(可以进行一些变化)大致的模糊查询下</p>
+<ul>
+<li>key（搜索出来的量应该蛮大的不便于查其实）</li>
+<li>http://</li>
+<li>password/passwd</li>
+<li>request</li>
+<li>respond</li>
+</ul>
+<p>这边先一个http 锁定了totor包里的几个值   其他包里基本上是导入的第三方的东西 这边得出两个地址 后期渗透测试可能会用上</p>
+<p>但是有些之前APP抓包里的URL这边直接搜不到 说明开发者还是做了隐藏的（可见下图倒数第四个应该是个url的构造包）</p>
+<p>所以此路不通</p>
+<p><img src="longmaoxiaoyuan/Untitled%206.png" alt="longmaoxiaoyuan/Untitled%206.png"></p>
+<p>后来找了好久 最终绝对把寻找路线锁定在 request response这些关键词上</p>
+<p>通过追踪找到了如下一个关键的包</p>
+<p><img src="longmaoxiaoyuan/Untitled%207.png" alt="longmaoxiaoyuan/Untitled%207.png"></p>
+<p><strong>关键代码段 对APP报名进行加密</strong></p>
+<p>很快会锁定到这几行代码</p>
+<p><img src="longmaoxiaoyuan/Untitled%208.png" alt="longmaoxiaoyuan/Untitled%208.png"></p>
+<p>可见第一行第五行都调用了包含AESUtils相关的包，这很可能是我们找的加密报文区</p>
+<p>可见在requestbody船舰前对body内容进行了一次AESUtils.m11871a()方法，在respondbody之后加了一个m11872b方法同时中间还对body(a4变量)加上了引号，这与我们之前抓包的报文加密的格式一致</p>
+<p>显然m11871a是一个加密方法   m11872b是一个解密方法 </p>
+<p>这两个方法传入两个参数 第一个传加密文本  第二个传密钥 </p>
+<p>可见这边加密密钥是空。于是我激动的拿去解密，结果是空欢喜一场。。。。解密并没有成功</p>
+<p>可是随便抓一个包解密发现解密失败</p>
+<p>进入AESUtils 继续查找</p>
+<p><img src="longmaoxiaoyuan/Untitled%209.png" alt="longmaoxiaoyuan/Untitled%209.png"></p>
+<h3 id="继续跟踪"><a href="#继续跟踪" class="headerlink" title="继续跟踪"></a>继续跟踪</h3><p>这边继续跟踪AESUtils类 查看AES类下的几个方法是怎么构造的</p>
+<p>可见这两个方法在执行时都会预先判断密钥是不是为空 为空的话就去从NDKTools.getKey方法获取并传入变量f10683作为密钥;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* renamed from: com.totoro.school.utilpub.network.a.a */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AESUtils</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: a */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String f10683a = NDKTools.getKey();   <span class="comment">//f10683a由getkey()方法赋值</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: a */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">m11871a</span><span class="params">(String str, String str2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (str2.isEmpty()) &#123;</span><br><span class="line">                str2 = f10683a;    <span class="comment">//密钥为空在密钥由f10683a赋值</span></span><br><span class="line">            &#125;</span><br><span class="line">            Cipher instance = Cipher.getInstance(NDKTools.getTransformation());</span><br><span class="line">            instance.init(<span class="number">1</span>, <span class="keyword">new</span> SecretKeySpec(m11870a(str2).getBytes(), <span class="string">&quot;AES&quot;</span>));</span><br><span class="line">            <span class="keyword">return</span> Base64.encodeToString(instance.doFinal(str.getBytes(<span class="string">&quot;utf-8&quot;</span>)), <span class="number">0</span>).replaceAll(<span class="string">&quot;\\r|\\n&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: b */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">m11872b</span><span class="params">(String str, String str2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (str2.isEmpty()) &#123;</span><br><span class="line">                str2 = f10683a;</span><br><span class="line">            &#125;</span><br><span class="line">            SecretKeySpec secretKeySpec = <span class="keyword">new</span> SecretKeySpec(m11870a(str2).getBytes(<span class="string">&quot;ASCII&quot;</span>), <span class="string">&quot;AES&quot;</span>);</span><br><span class="line">            Cipher instance = Cipher.getInstance(NDKTools.getTransformation());</span><br><span class="line">            instance.init(<span class="number">2</span>, secretKeySpec);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> String(instance.doFinal(Base64.decode(str, <span class="number">0</span>)), <span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>继续追踪NDKTools.getKey();</p>
+<p><img src="longmaoxiaoyuan/Untitled%2010.png" alt="longmaoxiaoyuan/Untitled%2010.png"></p>
+<p>很遗憾，里面的函数定义竟然全是空的。这个时候在末尾发现了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.loadLibrary(<span class="string">&quot;ndkdemotest-jni&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>显然这些函数的定义都被放到了 ndkdemotest-jni.so的动态链接库之中</p>
+<p>解包APK 从中提取出相关的so文件 使用ida打开</p>
+<p><img src="longmaoxiaoyuan/ida.jpg" alt="longmaoxiaoyuan/ida.jpg"></p>
+<p>很快找到了相关函数  F5反编译一气呵成 </p>
+<p><img src="longmaoxiaoyuan/Untitled%2011.png" alt="longmaoxiaoyuan/Untitled%2011.png"></p>
+<p>可见f10683a变量的值是 <a target="_blank" rel="noopener" href="http://www.xtotoro.com/student">www.xtotoro.com/student</a></p>
+<p>（but这个不是密钥）同时在其他函数中得到了其AES加密的具体类型 —&gt;AES/ECB/ISO10126Padding</p>
+<p>继续回到jadx 分析可知 str2要经过m11870方法 才得到相应的密钥</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">m11872b</span><span class="params">(String str, String str2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (str2.isEmpty()) &#123;</span><br><span class="line">                str2 = f10683a;</span><br><span class="line">            &#125;</span><br><span class="line">            SecretKeySpec secretKeySpec = <span class="keyword">new</span> SecretKeySpec(m11870a(str2).getBytes(<span class="string">&quot;ASCII&quot;</span>), <span class="string">&quot;AES&quot;</span>);</span><br><span class="line">            Cipher instance = Cipher.getInstance(NDKTools.getTransformation());</span><br><span class="line">            instance.init(<span class="number">2</span>, secretKeySpec);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> String(instance.doFinal(Base64.decode(str, <span class="number">0</span>)), <span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: a */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">m11870a</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (str.length() &gt; <span class="number">16</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> str.substring(<span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (str.length() &gt;= <span class="number">16</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> str;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> length = str.length() - <span class="number">1</span>; length &lt; <span class="number">15</span>; length++) &#123;</span><br><span class="line">            str = str + <span class="string">&quot;\\000&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>很显然m11870a方法是把字符串裁剪为16位（不足补，多则删） 因为这种加密密钥要16位</p>
+<p>最终可以得出来密钥为</p>
+<p><strong><a target="_blank" rel="noopener" href="http://www.totoro.com/">www.totoro.com/</a></strong></p>
+<p><img src="longmaoxiaoyuan/Untitled%2012.png" alt="longmaoxiaoyuan/Untitled%2012.png"></p>
+<h3 id="你以为就这么结束了？"><a href="#你以为就这么结束了？" class="headerlink" title="你以为就这么结束了？"></a>你以为就这么结束了？</h3><p>没有。。。。</p>
+<p>第二天跑步抓取上传数据分析 发现他一段跑步总共就发两个包开始一个包 结束一个包</p>
+<p>我果断先尝试解上传数据的那个大包。。。。结果</p>
+<p>解密好的参数又加了密…..</p>
+<p><img src="longmaoxiaoyuan/Untitled%2013.png" alt="longmaoxiaoyuan/Untitled%2013.png"></p>
+<p>这加密来的一套一套的真恶心。。。。</p>
+<p><img src="longmaoxiaoyuan/233.jpg" alt="longmaoxiaoyuan/233.jpg"></p>
+<p>好吧只能老老实实继续分析</p>
+<p>虽然加密了 但是参数还是给我们知道了 我这次有了上次的经验，找起来快了很多</p>
+<p>首先搜索参数 param_add param_old 跳转声明 其中两个加密参数使用之前的密钥解密发现第一个参数可以解下来可见参数中有个学小ID 一个学号 一个runcode(后面那串 ) 这个是之前通过跑步之前发的第一个包揭秘下来的他发送时会带上</p>
+<p><img src="longmaoxiaoyuan/Untitled%2014.png" alt="longmaoxiaoyuan/Untitled%2014.png"></p>
+<p><img src="longmaoxiaoyuan/Untitled%2015.png" alt="longmaoxiaoyuan/Untitled%2015.png"></p>
+<p>下显然这些在NewRunRegRequestModel类里会用到 于是查看该方法的用例</p>
+<p><strong>一眼就看到了那熟悉的函数！果断跟进！</strong></p>
+<p><img src="longmaoxiaoyuan/Untitled%2016.png" alt="longmaoxiaoyuan/Untitled%2016.png"></p>
+<p>这个时候会发现有两处加密 而且密钥不同  一个密钥为空（最终变为<a target="_blank" rel="noopener" href="http://www.xtotoro.com/%EF%BC%89">www.xtotoro.com/）</a> 还有个密钥为B 再通过上面sb.append有schoolid sncode还有个commonconstant.f10416d就可以确定这个是第一个参数param_add 同时 commonconstant.f10416d 也可以确定为runcode  再看第二个参数内容就应该是a密钥是b了</p>
+<p>内容不用关注 直接看 b  可见b是一个东西解密得到的（m11872b为解密函数）分析可知解密的内容是commonconstant.f10416d 即runcode 而密钥则是从</p>
+<p>c2818.m11940b（）方法中获取  继续跟进该方法 定位到关键函数处</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">m11940b</span><span class="params">(Context context, String str, Object obj)</span> </span>&#123;</span><br><span class="line">        SharedPreferences sharedPreferences = context.getSharedPreferences(<span class="string">&quot;totoro_school_share_data&quot;</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">            <span class="keyword">return</span> sharedPreferences.getString(str, (String) obj);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Integer) &#123;</span><br><span class="line">            <span class="keyword">return</span> Integer.valueOf(sharedPreferences.getInt(str, ((Integer) obj).intValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Boolean) &#123;</span><br><span class="line">            <span class="keyword">return</span> Boolean.valueOf(sharedPreferences.getBoolean(str, ((Boolean) obj).booleanValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Float) &#123;</span><br><span class="line">            <span class="keyword">return</span> Float.valueOf(sharedPreferences.getFloat(str, ((Float) obj).floatValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Long) &#123;</span><br><span class="line">            <span class="keyword">return</span> Long.valueOf(sharedPreferences.getLong(str, ((Long) obj).longValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>sharePreferences这个是安卓一个好像调用数据的方法 从“totoro_school_share_data”里面获取（键值对形式）</p>
+<p>而从之前调用这个函数的方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C2818m.m11940b(getBaseContext(), <span class="string">&quot;openId&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>可见这个其实是调用的open_id （open_id是微信授权登录时给用户分配给属于登陆应用的专有用户ID）</p>
+<p>然后可见该函数返回的值就是openid的内容 </p>
+<p>回到上层可见第二个参数的密钥其实就是 runcode通过密钥为用户openid值得到的值</p>
+<p>第二个参数即用这个值作为密钥，所以底下一步时获取openid</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b = AESUtils.m11872b(CommonConstant.f10416d, (String) C2818m.m11940b(getBaseContext(), <span class="string">&quot;openId&quot;</span>, <span class="string">&quot;&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="open-id-获取"><a href="#open-id-获取" class="headerlink" title="open id 获取"></a>open id 获取</h3><p>从APP的数据存储目录获取</p>
+<p>下载MT管理器</p>
+<p>电脑安装安卓模拟器（或者有root权限的手机或者手机安装VMOS虚拟机）</p>
+<p>装好MT管理器  微信  龙猫校园</p>
+<p>前提是要用微信登陆过一次‘</p>
+<p>先进根目录</p>
+<p><img src="longmaoxiaoyuan/Untitled%2017.png" alt="longmaoxiaoyuan/Untitled%2017.png"></p>
+<p>进入/data/data/com.totoro.school/shared_prefs/totoro_school_share_data.xml（路径也许不同 不一样的话直接搜文件名）</p>
+<p>进入这个xml文件进去以后open id就出来了 </p>
+<p><img src="longmaoxiaoyuan/Untitled%2018.png" alt="longmaoxiaoyuan/Untitled%2018.png"></p>
+<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><p>已经完成 目前内测当中，过几天发。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2021/03/24/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%9C%B0%E7%A0%B4%E8%A7%A3%E9%BE%99%E7%8C%AB%E6%A0%A1%E5%9B%AD/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+    
+      <a href="/2021/03/20/%E4%B8%80%E5%8D%A1%E9%80%9A/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">从学校一卡通充值系统信息泄露到薅羊毛</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "Q2DzjDCrNXTsDph43kV2JDGe-gzGzoHsz",
+    app_key: "ewaPH3xM0LFTvbEYvN1hGe0N",
+    path: window.location.pathname,
+    avatar: "936b6721e78be00f8c5e",
+    placeholder: "评论dd！",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2021
+        <i class="ri-heart-fill heart_icon"></i> M4pl3
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></s>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="Welcome."></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">目录</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/liuyan">留言板</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&uin=873763094&site=qq&menu=yes">QQ</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="https://github.com/fan1029">GitHub</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">友链</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about-me">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script>
+
+<script src="/js/clickBoom1.js"></script>
+
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+<!-- CanvasBackground -->
+
+
+<script src="/js/dz.js"></script>
+
+
+
+    
+  </div>
+</body>
+
+</html>
