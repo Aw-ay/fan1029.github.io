@@ -436,16 +436,13 @@
 ]]></content>
   </entry>
   <entry>
-    <title>如何优雅地破解龙猫校园</title>
-    <url>/2021/03/24/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%9C%B0%E7%A0%B4%E8%A7%A3%E9%BE%99%E7%8C%AB%E6%A0%A1%E5%9B%AD/</url>
-    <content><![CDATA[<h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>没错就是这个迫害广大学子的软件（手动滑稽）</p>
+    <title>如何优雅地破解龙猫</title>
+    <url>/2021/03/26/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%9C%B0%E7%A0%B4%E8%A7%A3%E9%BE%99%E7%8C%AB%E6%A0%A1%E5%9B%AD/</url>
+    <content><![CDATA[<h1 id="对某跑步软件的逆向分析"><a href="#对某跑步软件的逆向分析" class="headerlink" title="对某跑步软件的逆向分析"></a>对某跑步软件的逆向分析</h1><h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>最近学校要求用软件跑步打开</p>
+<p>没错就是这个迫害广大学子的软件（手动滑稽）</p>
 <p><img src="/images/longmaoxiaoyuan/Untitled.png" alt="/images/longmaoxiaoyuan/Untitled.png"></p>
-<blockquote>
-<p>跑步是不可能的，这辈子都是不可能的。——鲁迅</p>
-</blockquote>
-<p><img src="/images/longmaoxiaoyuan/2333.jpg" alt="/images/longmaoxiaoyuan/2333.jpg"></p>
-<hr>
-<p>首先二话不说，肯定是抓个包哈。很快啊。</p>
+<p>本着不想跑步的精神，我绝对对这个软件试探一番。</p>
+<h1 id="0x00"><a href="#0x00" class="headerlink" title="0x00"></a>0x00</h1><p>首先二话不说，肯定是抓个包哈。很快啊。</p>
 <p>不过运气不好</p>
 <p><img src="/images/longmaoxiaoyuan/Untitled%201.png" alt="/images/longmaoxiaoyuan/Untitled%201.png"></p>
 <p>请求包和返回包都被加密了。要想解密报文就必须逆向这个破软件</p>
@@ -454,16 +451,13 @@
 <p>反射大师一梭子直接脱壳</p>
 <p>脱出四个dex文件</p>
 <p><img src="/images/longmaoxiaoyuan/Untitled%202.png" alt="/images/longmaoxiaoyuan/Untitled%202.png"></p>
-<p>很快啊  放进JEB或者JADX 一看包名 代码 哦吼  他不讲武德  他还搞混淆 </p>
+<p>很快啊  放进JEB或者JADX </p>
 <p><img src="/images/longmaoxiaoyuan/Untitled%203.png" alt="/images/longmaoxiaoyuan/Untitled%203.png"></p>
 <p>进MYApplication下看看应该是入口  直接反编译成java代码</p>
-<p>可见代码混淆的还是蛮严重的。。</p>
-<p>(不过第一眼就看到了扫脸的相关逻辑 蛮恶心的不是吗 滑稽.jpg)</p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%204.png" alt="/images/longmaoxiaoyuan/Untitled%204.png"></p>
 <p>JEB2加载反混淆脚本（JADX下直接一键反混淆）虽然反混淆了但是部分关键方法类都还是杂乱的字符</p>
 <p>不过对比来说效果还是有的</p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%205.png" alt="/images/longmaoxiaoyuan/Untitled%205.png"></p>
-<h2 id="寻找加密函数"><a href="#寻找加密函数" class="headerlink" title="寻找加密函数"></a>寻找加密函数</h2><p>这边由于没有逆向基础 花了好长时间。。。。回头来看看只要找对方法应该会蛮快的</p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%204.png" alt="/images/longmaoxiaoyuan/Untitled%204.png"></p>
+<h2 id="寻找加密函数"><a href="#寻找加密函数" class="headerlink" title="寻找加密函数"></a>寻找加密函数</h2><p>这边由于没有啥逆向经验 花了好长时间。。。。回头来看看只要找对方法应该会蛮快的</p>
 <p>主要靠搜索定位大致代码区间 然后通过代码内容大致推测一些函数是用来干嘛的（毕竟被混淆了名字全变成了数字+字母）</p>
 <p>觉得有用的函数就直接调到函数调用的一些地方 还有函数声明的地方继续分析直到找到加密代码区</p>
 <hr>
@@ -477,14 +471,14 @@
 </ul>
 <p>这边先一个http 锁定了totor包里的几个值   其他包里基本上是导入的第三方的东西 这边得出两个地址 后期渗透测试可能会用上</p>
 <p>但是有些之前APP抓包里的URL这边直接搜不到 说明开发者还是做了隐藏的（可见下图倒数第四个应该是个url的构造包）</p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%205.png" alt="/images/longmaoxiaoyuan/Untitled%205.png"></p>
 <p>所以此路不通</p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%206.png" alt="/images/longmaoxiaoyuan/Untitled%206.png"></p>
 <p>后来找了好久 最终绝对把寻找路线锁定在 request response这些关键词上</p>
 <p>通过追踪找到了如下一个关键的包</p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%207.png" alt="/images/longmaoxiaoyuan/Untitled%207.png"></p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%206.png" alt="/images/longmaoxiaoyuan/Untitled%206.png"></p>
 <p><strong>关键代码段 对APP报名进行加密</strong></p>
 <p>很快会锁定到这几行代码</p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%208.png" alt="/images/longmaoxiaoyuan/Untitled%208.png"></p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%207.png" alt="/images/longmaoxiaoyuan/Untitled%207.png"></p>
 <p>可见第一行第五行都调用了包含AESUtils相关的包，这很可能是我们找的加密报文区</p>
 <p>可见在requestbody船舰前对body内容进行了一次AESUtils.m11871a()方法，在respondbody之后加了一个m11872b方法同时中间还对body(a4变量)加上了引号，这与我们之前抓包的报文加密的格式一致</p>
 <p>显然m11871a是一个加密方法   m11872b是一个解密方法 </p>
@@ -492,59 +486,65 @@
 <p>可见这边加密密钥是空。于是我激动的拿去解密，结果是空欢喜一场。。。。解密并没有成功</p>
 <p>可是随便抓一个包解密发现解密失败</p>
 <p>进入AESUtils 继续查找</p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%209.png" alt="/images/longmaoxiaoyuan/Untitled%209.png"></p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%208.png" alt="/images/longmaoxiaoyuan/Untitled%208.png"></p>
 <h3 id="继续跟踪"><a href="#继续跟踪" class="headerlink" title="继续跟踪"></a>继续跟踪</h3><p>这边继续跟踪AESUtils类 查看AES类下的几个方法是怎么构造的</p>
 <p>可见这两个方法在执行时都会预先判断密钥是不是为空 为空的话就去从NDKTools.getKey方法获取并传入变量f10683作为密钥;</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* renamed from: com.totoro.school.utilpub.network.a.a */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AESUtils</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: a */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String f10683a = NDKTools.getKey();   <span class="comment">//f10683a由getkey()方法赋值</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: a */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">m11871a</span><span class="params">(String str, String str2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (str2.isEmpty()) &#123;</span><br><span class="line">                str2 = f10683a;    <span class="comment">//密钥为空在密钥由f10683a赋值</span></span><br><span class="line">            &#125;</span><br><span class="line">            Cipher instance = Cipher.getInstance(NDKTools.getTransformation());</span><br><span class="line">            instance.init(<span class="number">1</span>, <span class="keyword">new</span> SecretKeySpec(m11870a(str2).getBytes(), <span class="string">&quot;AES&quot;</span>));</span><br><span class="line">            <span class="keyword">return</span> Base64.encodeToString(instance.doFinal(str.getBytes(<span class="string">&quot;utf-8&quot;</span>)), <span class="number">0</span>).replaceAll(<span class="string">&quot;\\r|\\n&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: b */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">m11872b</span><span class="params">(String str, String str2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (str2.isEmpty()) &#123;</span><br><span class="line">                str2 = f10683a;</span><br><span class="line">            &#125;</span><br><span class="line">            SecretKeySpec secretKeySpec = <span class="keyword">new</span> SecretKeySpec(m11870a(str2).getBytes(<span class="string">&quot;ASCII&quot;</span>), <span class="string">&quot;AES&quot;</span>);</span><br><span class="line">            Cipher instance = Cipher.getInstance(NDKTools.getTransformation());</span><br><span class="line">            instance.init(<span class="number">2</span>, secretKeySpec);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> String(instance.doFinal(Base64.decode(str, <span class="number">0</span>)), <span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* renamed from: com.totoro.school.utilpub.network.a.a */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AESUtils</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: a */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="built_in">static</span> <span class="keyword">final</span> <span class="keyword">String</span> f10683a = NDKTools.getKey();   <span class="comment">//f10683a由getkey()方法赋值</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: a */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="keyword">String</span> m11871a(<span class="keyword">String</span> str, <span class="keyword">String</span> str2) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (str2.isEmpty()) &#123;</span><br><span class="line">                str2 = f10683a;    <span class="comment">//密钥为空在密钥由f10683a赋值</span></span><br><span class="line">            &#125;</span><br><span class="line">            Cipher instance = Cipher.getInstance(NDKTools.getTransformation());</span><br><span class="line">            instance.init(<span class="number">1</span>, <span class="keyword">new</span> SecretKeySpec(m11870a(str2).getBytes(), <span class="string">&quot;AES&quot;</span>));</span><br><span class="line">            <span class="keyword">return</span> Base64.encodeToString(instance.doFinal(str.getBytes(<span class="string">&quot;utf-8&quot;</span>)), <span class="number">0</span>).replaceAll(<span class="string">&quot;\\r|\\n&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: b */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="keyword">String</span> m11872b(<span class="keyword">String</span> str, <span class="keyword">String</span> str2) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (str2.isEmpty()) &#123;</span><br><span class="line">                str2 = f10683a;</span><br><span class="line">            &#125;</span><br><span class="line">            SecretKeySpec secretKeySpec = <span class="keyword">new</span> SecretKeySpec(m11870a(str2).getBytes(<span class="string">&quot;ASCII&quot;</span>), <span class="string">&quot;AES&quot;</span>);</span><br><span class="line">            Cipher instance = Cipher.getInstance(NDKTools.getTransformation());</span><br><span class="line">            instance.init(<span class="number">2</span>, secretKeySpec);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">String</span>(instance.doFinal(Base64.decode(str, <span class="number">0</span>)), <span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p>继续追踪NDKTools.getKey();</p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%2010.png" alt="/images/longmaoxiaoyuan/Untitled%2010.png"></p>
-<p>很遗憾，里面的函数定义竟然全是空的。这个时候在末尾发现了</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.loadLibrary(<span class="string">&quot;ndkdemotest-jni&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/longmaoxiaoyuan/Untitled%209.png" alt="/images/longmaoxiaoyuan/Untitled%209.png"></p>
+<p>可见这边的函数应该是调用其他库的实现。这个时候在末尾发现了</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">System.loadLibrary(<span class="string">&quot;ndkdemotest-jni&quot;</span>);</span><br></pre></td></tr></table></figure>
 
 <p>显然这些函数的定义都被放到了 ndkdemotest-jni.so的动态链接库之中</p>
 <p>解包APK 从中提取出相关的so文件 使用ida打开</p>
 <p><img src="/images/longmaoxiaoyuan/ida.jpg" alt="/images/longmaoxiaoyuan/ida.jpg"></p>
-<p>很快找到了相关函数  F5反编译一气呵成 </p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%2011.png" alt="/images/longmaoxiaoyuan/Untitled%2011.png"></p>
-<p>可见f10683a变量的值是 ***********</p>
+<p>很快找到了相关函数 ,这边函数返回的内容直接显示了出来。那这边基本可以推断getkey()方法返回了 www.<em><strong><strong><strong>.com/</strong></strong></strong></em>(这边打个码)</p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2010.png" alt="/images/longmaoxiaoyuan/Untitled%2010.png"></p>
+<p>可见f10683a变量的值是 www.<em><strong><strong><strong>.com/</strong></strong></strong></em>(这边打个码)</p>
 <p>（but这个不是密钥）同时在其他函数中得到了其AES加密的具体类型 —&gt;AES/ECB/ISO10126Padding</p>
 <p>继续回到jadx 分析可知 str2要经过m11870方法 才得到相应的密钥</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">m11872b</span><span class="params">(String str, String str2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (str2.isEmpty()) &#123;</span><br><span class="line">                str2 = f10683a;</span><br><span class="line">            &#125;</span><br><span class="line">            SecretKeySpec secretKeySpec = <span class="keyword">new</span> SecretKeySpec(m11870a(str2).getBytes(<span class="string">&quot;ASCII&quot;</span>), <span class="string">&quot;AES&quot;</span>);</span><br><span class="line">            Cipher instance = Cipher.getInstance(NDKTools.getTransformation());</span><br><span class="line">            instance.init(<span class="number">2</span>, secretKeySpec);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> String(instance.doFinal(Base64.decode(str, <span class="number">0</span>)), <span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: a */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">m11870a</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (str.length() &gt; <span class="number">16</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> str.substring(<span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (str.length() &gt;= <span class="number">16</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> str;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> length = str.length() - <span class="number">1</span>; length &lt; <span class="number">15</span>; length++) &#123;</span><br><span class="line">            str = str + <span class="string">&quot;\\000&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">static</span> <span class="keyword">String</span> m11872b(<span class="keyword">String</span> str, <span class="keyword">String</span> str2) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (str2.isEmpty()) &#123;</span><br><span class="line">                str2 = f10683a;</span><br><span class="line">            &#125;</span><br><span class="line">            SecretKeySpec secretKeySpec = <span class="keyword">new</span> SecretKeySpec(m11870a(str2).getBytes(<span class="string">&quot;ASCII&quot;</span>), <span class="string">&quot;AES&quot;</span>);</span><br><span class="line">            Cipher instance = Cipher.getInstance(NDKTools.getTransformation());</span><br><span class="line">            instance.init(<span class="number">2</span>, secretKeySpec);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">String</span>(instance.doFinal(Base64.decode(str, <span class="number">0</span>)), <span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: a */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="keyword">String</span> m11870a(<span class="keyword">String</span> str) &#123;</span><br><span class="line">        <span class="keyword">if</span> (str.length() &gt; <span class="number">16</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> str.substring(<span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (str.length() &gt;= <span class="number">16</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> str;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> length = str.length() - <span class="number">1</span>; length &lt; <span class="number">15</span>; length++) &#123;</span><br><span class="line">            str = str + <span class="string">&quot;\\000&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p>很显然m11870a方法是把字符串裁剪为16位（不足补，多则删） 因为这种加密密钥要16位</p>
 <p>最终可以得出来密钥为</p>
-<p><strong><a href="http://www.totoro.com/">www.totoro.com/</a></strong></p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%2012.png" alt="/images/longmaoxiaoyuan/Untitled%2012.png"></p>
+<p><strong>www.*******.com/</strong></p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2011.png" alt="/images/longmaoxiaoyuan/Untitled%2011.png"></p>
 <h3 id="你以为就这么结束了？"><a href="#你以为就这么结束了？" class="headerlink" title="你以为就这么结束了？"></a>你以为就这么结束了？</h3><p>没有。。。。</p>
 <p>第二天跑步抓取上传数据分析 发现他一段跑步总共就发两个包开始一个包 结束一个包</p>
+<p>开始的包（获取一个run_code）：</p>
+<p>请求包解秘下来是学校ID 和学号</p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2012.png" alt="/images/longmaoxiaoyuan/Untitled%2012.png"></p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2013.png" alt="/images/longmaoxiaoyuan/Untitled%2013.png"></p>
+<p>结束时传数据的的包：</p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2014.png" alt="/images/longmaoxiaoyuan/Untitled%2014.png"></p>
 <p>我果断先尝试解上传数据的那个大包。。。。结果</p>
 <p>解密好的参数又加了密…..</p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%2013.png" alt="/images/longmaoxiaoyuan/Untitled%2013.png"></p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2015.png" alt="/images/longmaoxiaoyuan/Untitled%2015.png"></p>
 <p>这加密来的一套一套的真恶心。。。。</p>
 <p><img src="/images/longmaoxiaoyuan/233.jpg" alt="/images/longmaoxiaoyuan/233.jpg"></p>
 <p>好吧只能老老实实继续分析</p>
 <p>虽然加密了 但是参数还是给我们知道了 我这次有了上次的经验，找起来快了很多</p>
 <p>首先搜索参数 param_add param_old 跳转声明 其中两个加密参数使用之前的密钥解密发现第一个参数可以解下来可见参数中有个学小ID 一个学号 一个runcode(后面那串 ) 这个是之前通过跑步之前发的第一个包揭秘下来的他发送时会带上</p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%2014.png" alt="/images/longmaoxiaoyuan/Untitled%2014.png"></p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%2015.png" alt="/images/longmaoxiaoyuan/Untitled%2015.png"></p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2016.png" alt="/images/longmaoxiaoyuan/Untitled%2016.png"></p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2017.png" alt="/images/longmaoxiaoyuan/Untitled%2017.png"></p>
 <p>下显然这些在NewRunRegRequestModel类里会用到 于是查看该方法的用例</p>
 <p><strong>一眼就看到了那熟悉的函数！果断跟进！</strong></p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%2016.png" alt="/images/longmaoxiaoyuan/Untitled%2016.png"></p>
-<p>这个时候会发现有两处加密 而且密钥不同  一个密钥为空（最终变为动态链接库中的密钥） 还有个密钥为B 再通过上面sb.append有schoolid sncode还有个commonconstant.f10416d就可以确定这个是第一个参数param_add 同时 commonconstant.f10416d 也可以确定为runcode  再看第二个参数内容就应该是a密钥是b了</p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2018.png" alt="/images/longmaoxiaoyuan/Untitled%2018.png"></p>
+<p>这个时候会发现有两处加密 而且密钥不同  一个密钥为空（最终变为<a href="http://www.xtotoro.com/%EF%BC%89">www.xtotoro.com/）</a> 还有个密钥为B 再通过上面sb.append有schoolid sncode还有个commonconstant.f10416d就可以确定这个是第一个参数param_add 同时 commonconstant.f10416d 也可以确定为runcode  再看第二个参数内容就应该是a密钥是b了</p>
 <p>内容不用关注 直接看 b  可见b是一个东西解密得到的（m11872b为解密函数）分析可知解密的内容是commonconstant.f10416d 即runcode 而密钥则是从</p>
 <p>c2818.m11940b（）方法中获取  继续跟进该方法 定位到关键函数处</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">m11940b</span><span class="params">(Context context, String str, Object obj)</span> </span>&#123;</span><br><span class="line">        SharedPreferences sharedPreferences = context.getSharedPreferences(<span class="string">&quot;totoro_school_share_data&quot;</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">            <span class="keyword">return</span> sharedPreferences.getString(str, (String) obj);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Integer) &#123;</span><br><span class="line">            <span class="keyword">return</span> Integer.valueOf(sharedPreferences.getInt(str, ((Integer) obj).intValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Boolean) &#123;</span><br><span class="line">            <span class="keyword">return</span> Boolean.valueOf(sharedPreferences.getBoolean(str, ((Boolean) obj).booleanValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Float) &#123;</span><br><span class="line">            <span class="keyword">return</span> Float.valueOf(sharedPreferences.getFloat(str, ((Float) obj).floatValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Long) &#123;</span><br><span class="line">            <span class="keyword">return</span> Long.valueOf(sharedPreferences.getLong(str, ((Long) obj).longValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">static</span> <span class="keyword">Object</span> m11940b(Context context, <span class="keyword">String</span> str, <span class="keyword">Object</span> obj) &#123;</span><br><span class="line">        SharedPreferences sharedPreferences = context.getSharedPreferences(<span class="string">&quot;totoro_school_share_data&quot;</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="keyword">String</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> sharedPreferences.getString(str, (<span class="keyword">String</span>) obj);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="keyword">Integer</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">Integer</span>.valueOf(sharedPreferences.getInt(str, ((<span class="keyword">Integer</span>) obj).intValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="keyword">Boolean</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">Boolean</span>.valueOf(sharedPreferences.getBoolean(str, ((<span class="keyword">Boolean</span>) obj).booleanValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> <span class="keyword">Float</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">Float</span>.valueOf(sharedPreferences.getFloat(str, ((<span class="keyword">Float</span>) obj).floatValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> Long) &#123;</span><br><span class="line">            <span class="keyword">return</span> Long.valueOf(sharedPreferences.getLong(str, ((Long) obj).longValue()));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p>sharePreferences这个是安卓一个好像调用数据的方法 从“totoro_school_share_data”里面获取（键值对形式）</p>
 <p>而从之前调用这个函数的方法</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">C2818m.m11940b(getBaseContext(), <span class="string">&quot;openId&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">C2818m.m11940b(getBaseContext(), <span class="string">&quot;openId&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br></pre></td></tr></table></figure>
 
 <p>可见这个其实是调用的open_id （open_id是微信授权登录时给用户分配给属于登陆应用的专有用户ID）</p>
 <p>然后可见该函数返回的值就是openid的内容 </p>
 <p>回到上层可见第二个参数的密钥其实就是 runcode通过密钥为用户openid值得到的值</p>
 <p>第二个参数即用这个值作为密钥，所以底下一步时获取openid</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">b = AESUtils.m11872b(CommonConstant.f10416d, (String) C2818m.m11940b(getBaseContext(), <span class="string">&quot;openId&quot;</span>, <span class="string">&quot;&quot;</span>));</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">b = AESUtils.m11872b(CommonConstant.f10416d, (<span class="keyword">String</span>) C2818m.m11940b(getBaseContext(), <span class="string">&quot;openId&quot;</span>, <span class="string">&quot;&quot;</span>));</span><br></pre></td></tr></table></figure>
 
 <h3 id="open-id-获取"><a href="#open-id-获取" class="headerlink" title="open id 获取"></a>open id 获取</h3><p>从APP的数据存储目录获取</p>
 <p>下载MT管理器</p>
@@ -552,11 +552,27 @@
 <p>装好MT管理器  微信  龙猫校园</p>
 <p>前提是要用微信登陆过一次‘</p>
 <p>先进根目录</p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%2017.png" alt="/images/longmaoxiaoyuan/Untitled%2017.png"></p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2019.png" alt="/images/longmaoxiaoyuan/Untitled%2019.png"></p>
 <p>进入/data/data/com.totoro.school/shared_prefs/totoro_school_share_data.xml（路径也许不同 不一样的话直接搜文件名）</p>
 <p>进入这个xml文件进去以后open id就出来了 </p>
-<p><img src="/images/longmaoxiaoyuan/Untitled%2018.png" alt="/images/longmaoxiaoyuan/Untitled%2018.png"></p>
-<h2 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h2><p>已经完成 目前内测当中，过几天发。<br><img src="/images/longmaoxiaoyuan/8.png" alt="/images/longmaoxiaoyuan/8.png"></p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2020.png" alt="/images/longmaoxiaoyuan/Untitled%2020.png"></p>
+<p>获取完毕后拿open_id（前16位）作为runcode的密钥就能解密出runcode的内容（即为后来传数据的）</p>
+<p>先弄个获取runcode的包（每次跑步前发送）返回值用www.*******.com/密钥解密</p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2021.png" alt="/images/longmaoxiaoyuan/Untitled%2021.png"></p>
+<p>放入解密</p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2022.png" alt="/images/longmaoxiaoyuan/Untitled%2022.png"></p>
+<p>再将runcode内容用openid前16位进行解密</p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2023.png" alt="/images/longmaoxiaoyuan/Untitled%2023.png"></p>
+<p>可见得出来的内容正好16位那就和我们前面分析的结果基本上是对的了</p>
+<p>这个时候将之前解密包中的param_old参数中的内容用这个密钥解密就行了</p>
+<p>解密成功！可见这里面上传了用户的手机型号 mac 手机号码 学号 学校代号 GPS经纬度数据等等</p>
+<p>至此数据修改操作就很简单了（由于之前逆向时发现他基本上跑步是否合格都在客户端判断，这里也推测服务器不会再过多进行数据真伪判断）</p>
+<p><img src="/images/longmaoxiaoyuan/Untitled%2024.png" alt="/images/longmaoxiaoyuan/Untitled%2024.png"></p>
+<p>至此这款软件的报文加密就全部分析完毕了</p>
+<p>理一下大致过程</p>
+<p>跑步开始（get_runcode）—runcode用open_id用密钥1解密获取密钥2———提交数据包（密钥1解密后有两个主要参数param_add：用密钥1解密包含runcode 学号信息  param_old 用密钥2解密包含上传的跑步数据）</p>
+<h2 id="尾声"><a href="#尾声" class="headerlink" title="尾声"></a>尾声</h2><p>通过python脚本发包测试，成功！至此以后实现了跑步自由！</p>
+<p><img src="/images/longmaoxiaoyuan/8.png" alt="/images/longmaoxiaoyuan/8.png"></p>
 ]]></content>
   </entry>
   <entry>
