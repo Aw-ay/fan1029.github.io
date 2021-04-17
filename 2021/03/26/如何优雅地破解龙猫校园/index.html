@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    如何优雅地破解龙猫 |  Welcome.
+    学习通越权上传+XSS组合拳 |  Welcome.
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -63,7 +63,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  如何优雅地破解龙猫
+  学习通越权上传+XSS组合拳
 </h1>
  
 
@@ -71,7 +71,7 @@
      
     <div class="article-meta">
       <a href="/2021/03/26/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%9C%B0%E7%A0%B4%E8%A7%A3%E9%BE%99%E7%8C%AB%E6%A0%A1%E5%9B%AD/" class="article-date">
-  <time datetime="2021-03-26T05:39:32.000Z" itemprop="datePublished">2021-03-26</time>
+  <time datetime="2021-03-25T21:39:32.000Z" itemprop="datePublished">2021-03-26</time>
 </a>   
 <div class="word_count">
     <span class="post-time">
@@ -171,8 +171,7 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">static</span> <span class="keyword">String</span> m11872b(<span class="keyword">String</span> str, <span class="keyword">String</span> str2) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (str2.isEmpty()) &#123;</span><br><span class="line">                str2 = f10683a;</span><br><span class="line">            &#125;</span><br><span class="line">            SecretKeySpec secretKeySpec = <span class="keyword">new</span> SecretKeySpec(m11870a(str2).getBytes(<span class="string">&quot;ASCII&quot;</span>), <span class="string">&quot;AES&quot;</span>);</span><br><span class="line">            Cipher instance = Cipher.getInstance(NDKTools.getTransformation());</span><br><span class="line">            instance.init(<span class="number">2</span>, secretKeySpec);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">String</span>(instance.doFinal(Base64.decode(str, <span class="number">0</span>)), <span class="string">&quot;utf-8&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* renamed from: a */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">static</span> <span class="keyword">String</span> m11870a(<span class="keyword">String</span> str) &#123;</span><br><span class="line">        <span class="keyword">if</span> (str.length() &gt; <span class="number">16</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> str.substring(<span class="number">0</span>, <span class="number">16</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (str.length() &gt;= <span class="number">16</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> str;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> length = str.length() - <span class="number">1</span>; length &lt; <span class="number">15</span>; length++) &#123;</span><br><span class="line">            str = str + <span class="string">&quot;\\000&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p>很显然m11870a方法是把字符串裁剪为16位（不足补，多则删） 因为这种加密密钥要16位</p>
-<p>最终可以得出来密钥为</p>
-<p><strong>www.*******.com/</strong></p>
+<p>最终可以得出来密钥</p>
 <p><img src="/images/longmaoxiaoyuan/Untitled%2011.png" alt="/images/longmaoxiaoyuan/Untitled%2011.png"></p>
 <h3 id="你以为就这么结束了？"><a href="#你以为就这么结束了？" class="headerlink" title="你以为就这么结束了？"></a>你以为就这么结束了？</h3><p>没有。。。。</p>
 <p>第二天跑步抓取上传数据分析 发现他一段跑步总共就发两个包开始一个包 结束一个包</p>
