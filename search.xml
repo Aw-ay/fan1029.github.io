@@ -436,7 +436,7 @@
 ]]></content>
   </entry>
   <entry>
-    <title>学习通越权上传+XSS组合拳</title>
+    <title>如何优雅地破解龙猫校园</title>
     <url>/2021/03/26/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E5%9C%B0%E7%A0%B4%E8%A7%A3%E9%BE%99%E7%8C%AB%E6%A0%A1%E5%9B%AD/</url>
     <content><![CDATA[<h1 id="对某跑步软件的逆向分析"><a href="#对某跑步软件的逆向分析" class="headerlink" title="对某跑步软件的逆向分析"></a>对某跑步软件的逆向分析</h1><h1 id="序"><a href="#序" class="headerlink" title="序"></a>序</h1><p>最近学校要求用软件跑步打开</p>
 <p>没错就是这个迫害广大学子的软件（手动滑稽）</p>
